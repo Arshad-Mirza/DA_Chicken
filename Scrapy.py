@@ -6,7 +6,7 @@ import scrapy
 ##############
 #Class Extract
 ##############
-class Extract(scrapy.spiders):
+class Extract(scrapy.Spider):
     #Name for scrapy
     name = 'Spider'
 
