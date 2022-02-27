@@ -3,27 +3,43 @@
 ##############
 import scrapy
 
-
+##############
+#Class Extract
+##############
 class Extract(scrapy.spiders):
+    #Name for scrapy
     name = 'Spider'
+
+    #Website input
     start_urls = ['http://192.168.186.141/spicyx']
 
+    #############################
+    #Parse function
+    #Start crawling website
+    #############################
     def parse(self, response):
-        # Extract 'img'
+        # Extract image with 'img' tag
         Image_selector = 'img'
 
+        #Loop response to extract each image URL
         for x in response.css(Image_selector):
             # Image stored in src attribute
-            newsel = '@src'
+            URL = '@src'
 
-            # Show image url
+            # Display image url
             yield {
-                'Image Link:': x.xpath(newsel).extract_first(),
+                'Image Link:': x.xpath(URL).extract_first(),
             }
-
-        # Recursing next page
+        #####################
+        #To recurse next page
+        #####################
+        #Select '.next a' tag with 'href' attribute
         Page_selector = '.next a ::attr(href)'
+
+        #Extract URL to next page
         next_page = response.css(Page_selector).extract_first()
+
+        #If valid URL is avaliable, follow link call Parse function on the link
         if next_page:
             yield scrapy.Request (
                 response.urljoin(next_page),
